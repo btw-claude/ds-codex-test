@@ -7,7 +7,7 @@ A simple Python hello world application.
 
 ### Requirements
 
-- Python 3.8+
+- Python 3.9+
 
 ### How to Run
 
