@@ -15,6 +15,8 @@ A simple Python hello Codex application.
 python hello.py
 ```
 
+The greeting text is defined once in `greeting.py` as `GREETING`.
+
 This will output:
 ```
 Hello Codex
