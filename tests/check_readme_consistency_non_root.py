@@ -48,17 +48,6 @@ class NonRootScenario:
     name: str
     cwd_provider: Callable[[], ContextManager[Path]]
 
-
-def build_non_root_scenarios() -> tuple[NonRootScenario, ...]:
-    return (
-        NonRootScenario(name="tests subdirectory", cwd_provider=tests_subdirectory_cwd),
-        NonRootScenario(
-            name="temporary subdirectory",
-            cwd_provider=temporary_subdirectory_cwd,
-        ),
-    )
-
-
 @contextmanager
 def tests_subdirectory_cwd() -> Iterator[Path]:
     yield ROOT / "tests"
@@ -77,8 +66,17 @@ def temporary_subdirectory_cwd() -> Iterator[Path]:
         yield Path(temp_dir)
 
 
+NON_ROOT_SCENARIOS: tuple[NonRootScenario, ...] = (
+    NonRootScenario(name="tests subdirectory", cwd_provider=tests_subdirectory_cwd),
+    NonRootScenario(
+        name="temporary subdirectory",
+        cwd_provider=temporary_subdirectory_cwd,
+    ),
+)
+
+
 def main() -> None:
-    for scenario in build_non_root_scenarios():
+    for scenario in NON_ROOT_SCENARIOS:
         with scenario.cwd_provider() as cwd:
             run_check_from(cwd, scenario.name)
 
