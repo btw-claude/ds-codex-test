@@ -12,7 +12,7 @@ from greeting import GREETING
 
 
 def main() -> None:
-    readme = Path("README.md").read_text()
+    readme = (ROOT / "README.md").read_text()
     expected_block = f"This will output:\n```\n{GREETING}\n```"
     if expected_block not in readme:
         raise SystemExit(
