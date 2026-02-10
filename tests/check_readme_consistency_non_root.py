@@ -8,6 +8,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 CHECK_SCRIPT = ROOT / "tests" / "check_readme_consistency.py"
 SUCCESS_MESSAGE = "README output example matches GREETING constant"
+TEMP_DIR_PREFIX = "readme-non-root-"
 
 
 def run_check_from(cwd: Path, scenario: str) -> None:
@@ -42,13 +43,13 @@ def run_check_from(cwd: Path, scenario: str) -> None:
 def main() -> None:
     run_check_from(ROOT / "tests", "tests subdirectory")
 
-    with tempfile.TemporaryDirectory(dir=ROOT, prefix="readme-non-root-") as temp_dir:
+    with tempfile.TemporaryDirectory(dir=ROOT, prefix=TEMP_DIR_PREFIX) as temp_dir:
         temp_dir_name = Path(temp_dir).name
-        if not temp_dir_name.startswith("readme-non-root-"):
+        if not temp_dir_name.startswith(TEMP_DIR_PREFIX):
             raise SystemExit(
                 "Temporary directory name does not preserve expected prefix.\n"
                 f"temp_dir: {temp_dir}\n"
-                f"expected_prefix: readme-non-root-"
+                f"expected_prefix: {TEMP_DIR_PREFIX}"
             )
         run_check_from(Path(temp_dir), "temporary subdirectory")
 
