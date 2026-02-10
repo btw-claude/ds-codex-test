@@ -1,9 +1,9 @@
-"""A simple Hello World application."""
+"""A simple Hello Codex application."""
 
 
 def main():
-    """Print Hello World to the console."""
-    print("Hello World")
+    """Print Hello Codex to the console."""
+    print("Hello Codex")
 
 
 if __name__ == "__main__":
