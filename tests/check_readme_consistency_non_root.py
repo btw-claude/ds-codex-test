@@ -42,7 +42,7 @@ def run_check_from(cwd: Path, scenario: str) -> None:
 def main() -> None:
     run_check_from(ROOT / "tests", "tests subdirectory")
 
-    with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+    with tempfile.TemporaryDirectory(dir=ROOT, prefix="readme-non-root-") as temp_dir:
         run_check_from(Path(temp_dir), "temporary subdirectory")
 
 
