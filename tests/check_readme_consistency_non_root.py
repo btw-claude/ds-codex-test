@@ -43,6 +43,13 @@ def main() -> None:
     run_check_from(ROOT / "tests", "tests subdirectory")
 
     with tempfile.TemporaryDirectory(dir=ROOT, prefix="readme-non-root-") as temp_dir:
+        temp_dir_name = Path(temp_dir).name
+        if not temp_dir_name.startswith("readme-non-root-"):
+            raise SystemExit(
+                "Temporary directory name does not preserve expected prefix.\n"
+                f"temp_dir: {temp_dir}\n"
+                f"expected_prefix: readme-non-root-"
+            )
         run_check_from(Path(temp_dir), "temporary subdirectory")
 
 
