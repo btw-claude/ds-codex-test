@@ -38,3 +38,6 @@ jobs:
 
       - name: Verify README output example
         run: python tests/check_readme_consistency.py
+
+      - name: Verify README output example from non-root working directory
+        run: python tests/check_readme_consistency_non_root.py
