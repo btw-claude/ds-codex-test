@@ -3,17 +3,18 @@
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 CHECK_SCRIPT = ROOT / "tests" / "check_readme_consistency.py"
 SUCCESS_MESSAGE = "README output example matches GREETING constant"
 
 
-def main() -> None:
-    # Run from tests/ to ensure behavior is independent of current working dir.
+def run_check_from(cwd: Path, scenario: str) -> None:
+    # Run from a non-root cwd and verify the expected success output is preserved.
     result = subprocess.run(
         [sys.executable, str(CHECK_SCRIPT)],
-        cwd=ROOT / "tests",
+        cwd=cwd,
         capture_output=True,
         text=True,
         check=False,
@@ -21,6 +22,8 @@ def main() -> None:
     if result.returncode != 0:
         raise SystemExit(
             "README consistency check failed from non-root working directory.\n"
+            f"scenario: {scenario}\n"
+            f"cwd: {cwd}\n"
             f"stdout:\n{result.stdout}\n"
             f"stderr:\n{result.stderr}"
         )
@@ -28,10 +31,19 @@ def main() -> None:
     if SUCCESS_MESSAGE not in result.stdout:
         raise SystemExit(
             "README consistency check did not report expected success output "
-            "from non-root working directory."
+            "from non-root working directory.\n"
+            f"scenario: {scenario}\n"
+            f"cwd: {cwd}"
         )
 
-    print("README consistency check succeeds from non-root working directory")
+    print(f"README consistency check succeeds from non-root working directory ({scenario})")
+
+
+def main() -> None:
+    run_check_from(ROOT / "tests", "tests subdirectory")
+
+    with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+        run_check_from(Path(temp_dir), "temporary subdirectory")
 
 
 if __name__ == "__main__":
